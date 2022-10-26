@@ -1,20 +1,23 @@
 {
 	"name": "1-SalesForecastingWithAML",
 	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
 		"bigDataPool": {
 			"referenceName": "ws1sparkpool1",
 			"type": "BigDataPoolReference"
 		},
 		"sessionProperties": {
-			"driverMemory": "56g",
-			"driverCores": 8,
-			"executorMemory": "56g",
-			"executorCores": 8,
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
 			"numExecutors": 2,
 			"conf": {
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
-				"spark.dynamicAllocation.maxExecutors": "2"
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "0135a511-312e-4670-afd1-14f40b56b4a3"
 			}
 		},
 		"metadata": {
@@ -28,18 +31,19 @@
 				"name": "python"
 			},
 			"a365ComputeOptions": {
-				"id": "/subscriptions/4eeedd72-d937-4243-86d1-c3982a84d924/resourceGroups/nashahz0923-1/providers/Microsoft.Synapse/workspaces/mcr2rfcjdavtn5kupocws1/bigDataPools/ws1sparkpool1",
+				"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
 				"name": "ws1sparkpool1",
 				"type": "Spark",
-				"endpoint": "https://mcr2rfcjdavtn5kupocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+				"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
 				},
 				"sparkVersion": "2.4",
 				"nodeCount": 5,
-				"cores": 8,
-				"memory": 56
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -99,9 +103,9 @@
 					}
 				},
 				"source": [
-					"AMLWsname='<Name For AML Workspace to be Deployed>'\r\n",
-					"AMLWssubscription_id='<Subscription Id Where AML Workspace will be created, Same Subscription where Package is Deployed>'\r\n",
-					"AMLWsresource_group='<Resource Group Where AML Workspace will be created.Same Resource group where Package is Deployed>'"
+					"AMLWsname='vsayxg7ydw3tzkjqpocws1'\r\n",
+					"AMLWssubscription_id='75d3d9a6-7fad-46e1-bea2-4d2140013c78'\r\n",
+					"AMLWsresource_group='vsasynapsepoc'"
 				],
 				"execution_count": 1
 			},
