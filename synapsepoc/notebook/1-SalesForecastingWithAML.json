@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "0135a511-312e-4670-afd1-14f40b56b4a3"
+				"spark.autotune.trackingId": "bf707022-913f-4963-942e-1a247dc85cf3"
 			}
 		},
 		"metadata": {
@@ -211,7 +211,7 @@
 					"    spark.cosmos.container 'Products'\n",
 					");"
 				],
-				"execution_count": 13
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -261,7 +261,48 @@
 					"\n",
 					"display(data)"
 				],
-				"execution_count": 14
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"data.write.parquet('abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/demo_df', mode='overwrite')"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"SHOW TABLES"
+				],
+				"execution_count": 17
 			},
 			{
 				"cell_type": "markdown",
