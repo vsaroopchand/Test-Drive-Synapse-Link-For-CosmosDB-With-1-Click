@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "85d0c6f8-29f5-4b71-9ef2-7da94a1c06f5"
+				"spark.autotune.trackingId": "b905b9a7-2db9-4178-b37b-47cc38edb01a"
 			}
 		},
 		"metadata": {
@@ -211,7 +211,7 @@
 					"    spark.cosmos.container 'Products'\n",
 					");"
 				],
-				"execution_count": 13
+				"execution_count": 7
 			},
 			{
 				"cell_type": "markdown",
@@ -261,7 +261,48 @@
 					"\n",
 					"display(data)"
 				],
-				"execution_count": 14
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"data.write.partitionBy(\"productCode\").parquet('abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/demo_df', mode='overwrite')"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"SHOW TABLES"
+				],
+				"execution_count": 2
 			},
 			{
 				"cell_type": "markdown",
@@ -296,7 +337,7 @@
 					"               location='South Central US' ## Optional, Update If Required\r\n",
 					"               )"
 				],
-				"execution_count": 15
+				"execution_count": 18
 			},
 			{
 				"cell_type": "code",
