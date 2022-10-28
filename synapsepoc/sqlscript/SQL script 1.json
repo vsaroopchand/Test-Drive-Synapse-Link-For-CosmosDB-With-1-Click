@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "-- option 1\nCREATE OR ALTER VIEW SalesView\nAS SELECT *, SUBSTRING(result.filepath(1), 0, CHARINDEX('/', result.filepath(1))) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/demo_df/**',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n\n-- option 2\nDROP EXTERNAL DATA SOURCE salesResults\nCREATE EXTERNAL DATA SOURCE salesResults\nWITH ( LOCATION = 'https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/demodata/demo_df')\nGO\n\nCREATE OR ALTER VIEW SalesView2\nAS SELECT *, result.filePath(), result.fileName()\nFROM  \n    OPENROWSET(        \n        BULK 'productCode=*/*.snappy.parquet',\n        DATA_SOURCE = 'salesResults',\n        FORMAT='PARQUET'\n    ) AS [result]\n\nSELECT top 10 * FROM SalesView\nSELECT top 10 * FROM SalesView2 WHERE productCode = 'test'\n\n\n-- query just a single file\nSELECT *\nFROM  \n    OPENROWSET(        \n        BULK 'productCode=*/*.snappy.parquet',\n        DATA_SOURCE = 'salesResults',\n        FORMAT='PARQUET'\n    )WITH( quantity INT) AS [result]\nWHERE\n[result].filepath() IN ('productCode=surface.go/part-00000-2cbb014c-0795-4111-af98-18e8b89e1b3b.c000.snappy.parquet')\n\n\n-- record count by files\nSELECT\n    r.filename() AS [filename]\n    ,COUNT_BIG(*) AS [rows]\nFROM OPENROWSET(\n         BULK 'productCode=*/*.snappy.parquet',\n        DATA_SOURCE = 'salesResults',\n        FORMAT='PARQUET') \n        WITH (productCode varchar(200) ) AS [r]\nGROUP BY\n    r.filename()\nORDER BY\n    [filename];\n\n-- record count by file path\nSELECT\n    r.filepath() AS [filepath]\n    ,COUNT_BIG(*) AS [rows]\nFROM OPENROWSET(\n         BULK 'productCode=*/*.snappy.parquet',\n        DATA_SOURCE = 'salesResults',\n        FORMAT='PARQUET') \n        WITH (productCode varchar(200) ) AS [r]\nGROUP BY\n    r.filepath()\nORDER BY\n    [filepath];    ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "TestDb",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
