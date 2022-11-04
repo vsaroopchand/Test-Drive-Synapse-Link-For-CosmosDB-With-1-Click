@@ -1,0 +1,17 @@
+{
+	"name": "Query Partitioned Data",
+	"properties": {
+		"content": {
+			"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *, result.filename() as filename, result.filepath() as filepath, result.filepath(1) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/userdata/dept_id=*/*.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\nwhere (CAST(result.filepath(1) as INT) ) = 10",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
