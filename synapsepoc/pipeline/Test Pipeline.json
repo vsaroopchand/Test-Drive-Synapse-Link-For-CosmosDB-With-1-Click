@@ -46,6 +46,20 @@
 				"defaultValue": "ValueOfTestParam3"
 			}
 		},
+		"variables": {
+			"TestParam1": {
+				"type": "String",
+				"defaultValue": "VariableForTestParam1"
+			},
+			"TestParam2": {
+				"type": "String",
+				"defaultValue": "VariableForTestParam2"
+			},
+			"TestParam3": {
+				"type": "String",
+				"defaultValue": "VariableForTestParam3"
+			}
+		},
 		"annotations": []
 	}
 }
