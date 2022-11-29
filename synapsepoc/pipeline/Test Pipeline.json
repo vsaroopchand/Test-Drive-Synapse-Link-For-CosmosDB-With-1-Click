@@ -19,6 +19,29 @@
 						"referenceName": "Scratchpad",
 						"type": "NotebookReference"
 					},
+					"parameters": {
+						"TestParam1": {
+							"value": {
+								"value": "@pipeline().parameters.TestParam1",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"TestParam2": {
+							"value": {
+								"value": "@pipeline().parameters.TestParam2",
+								"type": "Expression"
+							},
+							"type": "string"
+						},
+						"TestParam3": {
+							"value": {
+								"value": "@pipeline().parameters.TestParam3",
+								"type": "Expression"
+							},
+							"type": "string"
+						}
+					},
 					"snapshot": true,
 					"sparkPool": {
 						"referenceName": "ws1sparkpool1",
