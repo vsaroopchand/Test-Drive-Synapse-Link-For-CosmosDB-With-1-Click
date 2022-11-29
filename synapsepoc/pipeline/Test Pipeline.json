@@ -33,9 +33,17 @@
 			}
 		],
 		"parameters": {
-			"TestParam": {
+			"TestParam1": {
 				"type": "string",
-				"defaultValue": "test123"
+				"defaultValue": "ValueOfTestParam1"
+			},
+			"TestParam2": {
+				"type": "string",
+				"defaultValue": "ValueOfTestParam2"
+			},
+			"TestParam3": {
+				"type": "string",
+				"defaultValue": "ValueOfTestParam3"
 			}
 		},
 		"annotations": []
