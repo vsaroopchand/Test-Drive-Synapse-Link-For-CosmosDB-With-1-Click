@@ -5,7 +5,16 @@
 		"workspaceName": {
 			"value": "vsayxg7ydw3tzkjqpocws1"
 		},
+		"AzureTableStorage1_connectionString": {
+			"value": ""
+		},
 		"CosmosDBLink_connectionString": {
+			"value": ""
+		},
+		"MainLake_properties_typeProperties_url": {
+			"value": "https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/"
+		},
+		"bing-covid-19-data_sasUri": {
 			"value": ""
 		},
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
