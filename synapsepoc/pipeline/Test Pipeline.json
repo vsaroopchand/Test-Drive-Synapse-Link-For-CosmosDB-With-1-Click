@@ -19,7 +19,16 @@
 						"referenceName": "Scratchpad",
 						"type": "NotebookReference"
 					},
-					"snapshot": true
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "ws1sparkpool1",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": null,
+					"conf": {
+						"spark.dynamicAllocation.enabled": true
+					},
+					"driverSize": null
 				}
 			}
 		],
