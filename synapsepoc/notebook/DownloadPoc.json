@@ -1,0 +1,279 @@
+{
+	"name": "DownloadPoc",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "ws1sparkpool1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "3660c4a2-1e77-4d32-9481-bb043be22b78"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
+				"name": "ws1sparkpool1",
+				"type": "Spark",
+				"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 5,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
+					"print(msg)"
+				],
+				"execution_count": 30
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"TenantId = \"tid-1\"\r\n",
+					"EnvironmentId = \"eid-1\"\r\n",
+					"SessionId = \"s1\""
+				],
+				"execution_count": 31
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"print('Input Parameters: TID: {0} - EID: {1}'.format(TenantId, EnvironmentId))"
+				],
+				"execution_count": 32
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"tags": []
+				},
+				"source": [
+					"# TenantId, EnvironmentId, ResourceId, UserId, LicenseId, LicenseClassification\r\n",
+					"data = [(\"tid-1\",\"eid-1\", \"rid-1\", \"uid-1\", \"lic-1\", \"License Display A\"), \r\n",
+					"        (\"tid-1\",\"eid-1\", \"rid-2\", \"uid-2\", \"lic-1\", \"License Display A\"), \r\n",
+					"        (\"tid-1\",\"eid-2\", \"rid-3\", \"uid-3\", \"lic-1\", \"License Display A\"), \r\n",
+					"        (\"tid-1\",\"eid-2\", \"rid-4\", \"uid-4\", \"lic-1\", \"License Display A\"), \r\n",
+					"      ]"
+				],
+				"execution_count": 33
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
+					"lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+					"lic_df.printSchema()\r\n",
+					"lic_df.show(truncate=False)"
+				],
+				"execution_count": 34
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"lic_df.createOrReplaceTempView(\"tmpLicenses\");"
+				],
+				"execution_count": 35
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"results = spark.sql(\"select * from tmpLicenses where tenantId == '{0}'\".format(TenantId))"
+				],
+				"execution_count": 36
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"results.printSchema()\r\n",
+					"results.show(truncate=False)"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from pyspark.sql.functions import lit\r\n",
+					"results.withColumn(\"sessionId\", lit(SessionId))"
+				],
+				"execution_count": 37
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"fileName = \"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/downloads/{0}/{1}\".format(TenantId,SessionId)\r\n",
+					"results.coalesce(1).write.csv(fileName, mode='overwrite')"
+				],
+				"execution_count": 41
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"mssparkutils.notebook.exit(fileName)"
+				],
+				"execution_count": 42
+			}
+		]
+	}
+}
