@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3660c4a2-1e77-4d32-9481-bb043be22b78"
+				"spark.autotune.trackingId": "5e09bd3f-0ade-4505-8f67-c72ec1ca3deb"
 			}
 		},
 		"metadata": {
@@ -138,8 +138,9 @@
 					}
 				},
 				"source": [
-					"schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
-					"lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+					"#schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
+					"#lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+					"lic_df=spark.read.parquet(\"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/licenses/tenantId={0}\".format(TenantId))\r\n",
 					"lic_df.printSchema()\r\n",
 					"lic_df.show(truncate=False)"
 				],
