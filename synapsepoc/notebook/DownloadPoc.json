@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "47aefa3e-d9cc-47b6-9920-c1c221a7d4e9"
+				"spark.autotune.trackingId": "206743ec-154b-4dfb-8b65-d8e7f51d90ae"
 			}
 		},
 		"metadata": {
@@ -238,9 +238,9 @@
 				},
 				"source": [
 					"fileName = \"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/downloads/{0}/{1}\".format(TenantId,SessionId)\r\n",
-					"results.coalesce(1).write.csv(fileName, mode='overwrite')"
+					"results.coalesce(1).write.option(\"header\",true).csv(fileName, mode='overwrite')"
 				],
-				"execution_count": 10
+				"execution_count": 12
 			},
 			{
 				"cell_type": "code",
