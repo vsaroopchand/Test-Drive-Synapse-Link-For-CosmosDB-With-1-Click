@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "206743ec-154b-4dfb-8b65-d8e7f51d90ae"
+				"spark.autotune.trackingId": "a544db41-1dca-4fa5-b3c8-7a976309c370"
 			}
 		},
 		"metadata": {
@@ -66,7 +66,7 @@
 					"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
 					"print(msg)"
 				],
-				"execution_count": 1
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -89,7 +89,7 @@
 					"EnvironmentId = \"eid-1\"\r\n",
 					"SessionId = \"test\""
 				],
-				"execution_count": 2
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
@@ -107,7 +107,7 @@
 				"source": [
 					"print('Input Parameters: TID: {0} - EID: {1}'.format(TenantId, EnvironmentId))"
 				],
-				"execution_count": 3
+				"execution_count": 15
 			},
 			{
 				"cell_type": "code",
@@ -122,7 +122,7 @@
 					"        (\"tid-1\",\"eid-2\", \"rid-4\", \"uid-4\", \"lic-1\", \"License Display A\"), \r\n",
 					"      ]"
 				],
-				"execution_count": 4
+				"execution_count": 16
 			},
 			{
 				"cell_type": "code",
@@ -144,7 +144,7 @@
 					"lic_df.printSchema()\r\n",
 					"lic_df.show(truncate=False)"
 				],
-				"execution_count": 5
+				"execution_count": 17
 			},
 			{
 				"cell_type": "code",
@@ -163,7 +163,7 @@
 					"# create a temp view to manipulate data using SQL\r\n",
 					"lic_df.createOrReplaceTempView(\"tmpLicenses\");"
 				],
-				"execution_count": 6
+				"execution_count": 18
 			},
 			{
 				"cell_type": "code",
@@ -182,7 +182,7 @@
 					"# do any additional filtering, aggregations, etc.\r\n",
 					"results = spark.sql(\"select * from tmpLicenses\")"
 				],
-				"execution_count": 7
+				"execution_count": 19
 			},
 			{
 				"cell_type": "code",
@@ -218,10 +218,9 @@
 				},
 				"source": [
 					"from pyspark.sql.functions import lit\r\n",
-					"results.withColumn(\"sessionId\", lit(SessionId))\r\n",
-					"results.withColumn(\"tenantId\", lit(TenantId))"
+					"results = results.withColumn(\"sessionId\", lit(SessionId)).withColumn(\"tenantId\", lit(TenantId))"
 				],
-				"execution_count": 9
+				"execution_count": 29
 			},
 			{
 				"cell_type": "code",
@@ -238,9 +237,9 @@
 				},
 				"source": [
 					"fileName = \"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/downloads/{0}/{1}\".format(TenantId,SessionId)\r\n",
-					"results.coalesce(1).write.option(\"header\",true).csv(fileName, mode='overwrite')"
+					"results.coalesce(1).write.option(\"header\",'true').csv(fileName, mode='overwrite')"
 				],
-				"execution_count": 12
+				"execution_count": 30
 			},
 			{
 				"cell_type": "code",
