@@ -24,19 +24,22 @@
 							"value": {
 								"value": "@pipeline().parameters.TenantId",
 								"type": "Expression"
-							}
+							},
+							"type": "string"
 						},
 						"EnvironmentId": {
 							"value": {
 								"value": "@pipeline().parameters.EnvironmentId",
 								"type": "Expression"
-							}
+							},
+							"type": "string"
 						},
 						"SessionId": {
 							"value": {
 								"value": "@pipeline().parameters.SessionId",
 								"type": "Expression"
-							}
+							},
+							"type": "string"
 						}
 					},
 					"snapshot": true,
