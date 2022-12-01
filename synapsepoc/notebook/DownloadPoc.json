@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "be768812-e89c-4a6c-92a4-0e34394845f1"
+				"spark.autotune.trackingId": "56d2ee09-382c-4aab-8c04-eb991ec52f4f"
 			}
 		},
 		"metadata": {
@@ -160,6 +160,7 @@
 					}
 				},
 				"source": [
+					"# create a temp view to manipulate data using SQL\r\n",
 					"lic_df.createOrReplaceTempView(\"tmpLicenses\");"
 				],
 				"execution_count": 35
@@ -178,7 +179,8 @@
 					}
 				},
 				"source": [
-					"results = spark.sql(\"select * from tmpLicenses where tenantId == '{0}'\".format(TenantId))"
+					"# do any additional filtering, aggregations, etc.\r\n",
+					"results = spark.sql(\"select * from tmpLicenses where tenantId\")"
 				],
 				"execution_count": 36
 			},
@@ -238,24 +240,6 @@
 					"results.coalesce(1).write.csv(fileName, mode='overwrite')"
 				],
 				"execution_count": 41
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"source_hidden": false,
-						"outputs_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					}
-				},
-				"source": [
-					""
-				],
-				"execution_count": null
 			},
 			{
 				"cell_type": "code",
