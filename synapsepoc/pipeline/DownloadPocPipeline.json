@@ -63,7 +63,7 @@
 			},
 			"SessionId": {
 				"type": "string",
-				"defaultValue": "sid-2"
+				"defaultValue": "debug-1"
 			}
 		},
 		"annotations": []
