@@ -24,37 +24,22 @@
 							"value": {
 								"value": "@pipeline().parameters.TenantId",
 								"type": "Expression"
-							},
-							"type": "string"
+							}
 						},
 						"EnvironmentId": {
 							"value": {
 								"value": "@pipeline().parameters.EnvironmentId",
 								"type": "Expression"
-							},
-							"type": "string"
+							}
 						},
 						"SessionId": {
 							"value": {
 								"value": "@pipeline().parameters.SessionId",
 								"type": "Expression"
-							},
-							"type": "string"
+							}
 						}
 					},
-					"snapshot": true,
-					"sparkPool": {
-						"referenceName": "ws1sparkpool1",
-						"type": "BigDataPoolReference"
-					},
-					"executorSize": "Small",
-					"conf": {
-						"spark.dynamicAllocation.enabled": null,
-						"spark.dynamicAllocation.minExecutors": null,
-						"spark.dynamicAllocation.maxExecutors": null
-					},
-					"driverSize": "Small",
-					"numExecutors": null
+					"snapshot": true
 				}
 			}
 		],
