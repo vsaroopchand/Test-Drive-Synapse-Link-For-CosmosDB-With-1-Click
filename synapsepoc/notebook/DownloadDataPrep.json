@@ -1,0 +1,141 @@
+{
+	"name": "DownloadDataPrep",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "ws1sparkpool1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "56124838-0ed8-4328-b223-52e5b66a8d6b"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
+				"name": "ws1sparkpool1",
+				"type": "Spark",
+				"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "2.4",
+				"nodeCount": 5,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
+					"print(msg)"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"tags": []
+				},
+				"source": [
+					"# TenantId, EnvironmentId, ResourceId, UserId, LicenseId, LicenseClassification\r\n",
+					"data = [\r\n",
+					"    (\"tid-1\", \"eid-1a\", \"rid-1a\", \"uid-1\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-1\", \"eid-1a\", \"rid-2a\", \"uid-2\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-1\", \"eid-2a\", \"rid-3a\", \"uid-3\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-1\", \"eid-2a\", \"rid-4a\", \"uid-4\", \"lic-1\", \"License Display A\"),    \r\n",
+					"    (\"tid-2\", \"eid-1b\", \"rid-1b\", \"uid-5\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-2\", \"eid-1b\", \"rid-2b\", \"uid-6\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-2\", \"eid-2b\", \"rid-3b\", \"uid-7\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-2\", \"eid-2b\", \"rid-4b\", \"uid-8\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-3\", \"eid-1c\", \"rid-1c\", \"uid-9\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-3\", \"eid-1c\", \"rid-2c\", \"uid-10\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-3\", \"eid-2c\", \"rid-3c\", \"uid-11\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-3\", \"eid-2c\", \"rid-4c\", \"uid-12\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-4\", \"eid-1d\", \"rid-1d\", \"uid-13\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-4\", \"eid-1d\", \"rid-2d\", \"uid-14\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-4\", \"eid-2d\", \"rid-3d\", \"uid-15\", \"lic-1\", \"License Display A\"),\r\n",
+					"    (\"tid-4\", \"eid-2d\", \"rid-4d\", \"uid-16\", \"lic-1\", \"License Display A\"),\r\n",
+					"]"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
+					"lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+					"lic_df.printSchema()\r\n",
+					"lic_df.show(truncate=False)"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"lic_df.write.partitionBy(\"tenantId\").parquet('abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/licenses', mode='overwrite')\r\n",
+					""
+				],
+				"execution_count": 5
+			}
+		]
+	}
+}
