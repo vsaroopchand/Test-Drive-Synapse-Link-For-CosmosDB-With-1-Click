@@ -18,7 +18,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "5e09bd3f-0ade-4505-8f67-c72ec1ca3deb"
+				"spark.autotune.trackingId": "be768812-e89c-4a6c-92a4-0e34394845f1"
 			}
 		},
 		"metadata": {
@@ -85,9 +85,9 @@
 					]
 				},
 				"source": [
-					"TenantId = \"tid-1\"\r\n",
-					"EnvironmentId = \"eid-1\"\r\n",
-					"SessionId = \"s1\""
+					"TenantId = \"\"\r\n",
+					"EnvironmentId = \"\"\r\n",
+					"SessionId = \"\""
 				],
 				"execution_count": 31
 			},
