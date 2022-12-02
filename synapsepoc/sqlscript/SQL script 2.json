@@ -2,7 +2,7 @@
 	"name": "SQL script 2",
 	"properties": {
 		"content": {
-			"query": "SELECT\n    TOP 100 *, result.filename() as filename, result.filepath() as filepath, result.filepath(1) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/tenantId=*/*.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\nwhere (CAST(result.filepath(1) as varchar(10)) ) = 'tid-1'\n\n\n-- Read all Partitions\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/**',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n    ",
+			"query": "SELECT\n    TOP 100 *, result.filename() as filename, result.filepath() as filepath, result.filepath(1) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/tenantId=*/*/envid=*/*.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\nwhere (CAST(result.filepath(1) as varchar(10)) ) = 'tid-1' and (CAST(result.filepath(2) as varchar(10)) ) = 'eid-1'\n\n\n-- Read all Partitions\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/**',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n    ",
 			"metadata": {
 				"language": "sql"
 			},
