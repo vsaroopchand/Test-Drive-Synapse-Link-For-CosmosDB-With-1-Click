@@ -14,11 +14,9 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "3646a082-24ca-4d78-b6c6-473644cabd11"
+				"spark.autotune.trackingId": "9739700b-0e7e-4c5e-8d59-da392be5d1ba"
 			},
-			"args": [
-				"--tid --eid"
-			],
+			"args": [],
 			"jars": [],
 			"pyFiles": [
 				""
