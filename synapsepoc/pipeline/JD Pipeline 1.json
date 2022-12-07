@@ -42,11 +42,11 @@
 		"parameters": {
 			"tid": {
 				"type": "string",
-				"defaultValue": "tid-1"
+				"defaultValue": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt"
 			},
 			"eid": {
 				"type": "string",
-				"defaultValue": "eid-1"
+				"defaultValue": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/out.txt"
 			}
 		},
 		"annotations": []
