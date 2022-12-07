@@ -1,0 +1,54 @@
+{
+	"name": "JD Pipeline 1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Spark job definition 1",
+				"type": "SparkJob",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"sparkJob": {
+						"referenceName": "Spark job definition 1",
+						"type": "SparkJobDefinitionReference"
+					},
+					"args": [
+						"@pipeline().parameters.tid",
+						"@pipeline().parameters.eid",
+						"@pipeline().parameters.eid"
+					],
+					"targetBigDataPool": {
+						"referenceName": "ws1sparkpool1",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"conf": {
+						"spark.dynamicAllocation.enabled": true,
+						"spark.dynamicAllocation.minExecutors": 1,
+						"spark.dynamicAllocation.maxExecutors": 2
+					},
+					"driverSize": "Small",
+					"numExecutors": 1
+				}
+			}
+		],
+		"parameters": {
+			"tid": {
+				"type": "string",
+				"defaultValue": "tid-1"
+			},
+			"eid": {
+				"type": "string",
+				"defaultValue": "eid-1"
+			}
+		},
+		"annotations": []
+	}
+}
