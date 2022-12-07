@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Spark job definition 1",
+				"name": "Spark job definition 1 1",
 				"type": "SparkJob",
 				"dependsOn": [],
 				"policy": {
@@ -19,23 +19,10 @@
 						"referenceName": "Spark job definition 1",
 						"type": "SparkJobDefinitionReference"
 					},
-					"file": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/wordcount.py",
 					"args": [
 						"@pipeline().parameters.tid",
 						"@pipeline().parameters.eid"
-					],
-					"targetBigDataPool": {
-						"referenceName": "ws1sparkpool1",
-						"type": "BigDataPoolReference"
-					},
-					"executorSize": "Small",
-					"conf": {
-						"spark.dynamicAllocation.enabled": true,
-						"spark.dynamicAllocation.minExecutors": 1,
-						"spark.dynamicAllocation.maxExecutors": 2
-					},
-					"driverSize": "Small",
-					"numExecutors": 1
+					]
 				}
 			}
 		],
