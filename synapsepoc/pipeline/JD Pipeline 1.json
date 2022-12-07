@@ -21,7 +21,6 @@
 					},
 					"args": [
 						"@pipeline().parameters.tid",
-						"@pipeline().parameters.eid",
 						"@pipeline().parameters.eid"
 					],
 					"targetBigDataPool": {
