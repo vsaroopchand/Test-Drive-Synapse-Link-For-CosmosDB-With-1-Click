@@ -19,6 +19,7 @@
 						"referenceName": "Spark job definition 1",
 						"type": "SparkJobDefinitionReference"
 					},
+					"file": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/wordcount.py",
 					"args": [
 						"@pipeline().parameters.tid",
 						"@pipeline().parameters.eid"
