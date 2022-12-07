@@ -14,9 +14,11 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "9739700b-0e7e-4c5e-8d59-da392be5d1ba"
+				"spark.autotune.trackingId": "e9a33229-a3a3-4742-a0e4-e741920e0876"
 			},
-			"args": [],
+			"args": [
+				"--abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt --abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/result.txt"
+			],
 			"jars": [],
 			"pyFiles": [
 				""
