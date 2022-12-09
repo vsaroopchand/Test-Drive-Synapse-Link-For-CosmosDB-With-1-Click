@@ -7,6 +7,7 @@
 		},
 		"requiredSparkVersion": "2.4",
 		"language": "python",
+		"scanFolder": false,
 		"jobProperties": {
 			"name": "Spark job definition 1",
 			"file": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/wordcount.py",
@@ -14,7 +15,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "06610e44-37fb-4a6a-b181-940514eda1aa"
+				"spark.autotune.trackingId": "d0ebcbd9-5e05-4943-8e52-401fd24053bb"
 			},
 			"args": [
 				"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt",
@@ -22,7 +23,7 @@
 			],
 			"jars": [],
 			"pyFiles": [
-				""
+				"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/reference.py"
 			],
 			"files": [],
 			"driverMemory": "28g",
