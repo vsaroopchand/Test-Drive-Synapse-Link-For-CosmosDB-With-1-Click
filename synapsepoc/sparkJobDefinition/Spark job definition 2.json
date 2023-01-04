@@ -1,0 +1,34 @@
+{
+	"name": "Spark job definition 2",
+	"properties": {
+		"targetBigDataPool": {
+			"referenceName": "ws1sparkpool1",
+			"type": "BigDataPoolReference"
+		},
+		"requiredSparkVersion": "2.4",
+		"language": "python",
+		"jobProperties": {
+			"name": "Spark job definition 2",
+			"file": "abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/wordcount.py",
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "1",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "9adfeb50-7669-4ae9-9b9c-813ca9cbe11a"
+			},
+			"args": [],
+			"jars": [],
+			"pyFiles": [
+				"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/reference.py"
+			],
+			"files": [
+				"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/shakespear.txt"
+			],
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2
+		}
+	}
+}
