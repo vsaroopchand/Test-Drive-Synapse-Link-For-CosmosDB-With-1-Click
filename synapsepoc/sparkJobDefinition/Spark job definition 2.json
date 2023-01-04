@@ -14,15 +14,18 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "1",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "9adfeb50-7669-4ae9-9b9c-813ca9cbe11a"
+				"spark.autotune.trackingId": "e093a393-4408-4780-a6da-80c80f72de21"
 			},
-			"args": [],
+			"args": [
+				"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt",
+				"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/results.txt"
+			],
 			"jars": [],
 			"pyFiles": [
 				"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/reference.py"
 			],
 			"files": [
-				"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/shakespear.txt"
+				"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/shakespeare.txt"
 			],
 			"driverMemory": "28g",
 			"driverCores": 4,
