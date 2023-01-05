@@ -7,10 +7,6 @@
 			"metadata": "Workspace name",
 			"defaultValue": "vsayxg7ydw3tzkjqpocws1"
 		},
-		"AzureTableStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureTableStorage1'"
-		},
 		"CosmosDBLink_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'CosmosDBLink'"
@@ -32,6 +28,146 @@
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/DownloadPocPipeline')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "DownloadPoc",
+						"type": "SynapseNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": "DownloadPoc",
+								"type": "NotebookReference"
+							},
+							"parameters": {
+								"TenantId": {
+									"value": {
+										"value": "@pipeline().parameters.TenantId",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"EnvironmentId": {
+									"value": {
+										"value": "@pipeline().parameters.EnvironmentId",
+										"type": "Expression"
+									},
+									"type": "string"
+								},
+								"SessionId": {
+									"value": {
+										"value": "@pipeline().parameters.SessionId",
+										"type": "Expression"
+									},
+									"type": "string"
+								}
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": "ws1sparkpool1",
+								"type": "BigDataPoolReference"
+							},
+							"executorSize": "Small",
+							"conf": {
+								"spark.dynamicAllocation.enabled": true
+							},
+							"driverSize": "Small"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"TenantId": {
+						"type": "string",
+						"defaultValue": "tid-1"
+					},
+					"EnvironmentId": {
+						"type": "string",
+						"defaultValue": "eid-1"
+					},
+					"SessionId": {
+						"type": "string",
+						"defaultValue": "debug-1"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/DownloadPoc')]",
+				"[concat(variables('workspaceId'), '/bigDataPools/ws1sparkpool1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/JD Pipeline 1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Spark job definition 1 1",
+						"type": "SparkJob",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"sparkJob": {
+								"referenceName": "Spark job definition 1",
+								"type": "SparkJobDefinitionReference"
+							},
+							"args": [
+								"@pipeline().parameters.tid",
+								"@pipeline().parameters.eid"
+							],
+							"conf": {
+								"spark.dynamicAllocation.enabled": null,
+								"spark.dynamicAllocation.minExecutors": null,
+								"spark.dynamicAllocation.maxExecutors": null
+							},
+							"numExecutors": null
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"tid": {
+						"type": "string",
+						"defaultValue": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt"
+					},
+					"eid": {
+						"type": "string",
+						"defaultValue": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/out.txt"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/sparkJobDefinitions/Spark job definition 1')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/Test Pipeline')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
@@ -128,25 +264,6 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/notebooks/Scratchpad')]",
 				"[concat(variables('workspaceId'), '/bigDataPools/ws1sparkpool1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/AzureTableStorage1')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureTableStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureTableStorage1_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
 			]
 		},
 		{
@@ -258,6 +375,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Query Parquet using SQL Pool')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "-- Read single Partition\nSELECT\n    TOP 100 *, result.filename() as filename, result.filepath() as filepath, result.filepath(1) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/tenantId=*/*.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\nwhere (CAST(result.filepath(1) as varchar(10)) ) = 'tid-1'\n\n-- Read all Partitions\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/**',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n    \n\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Query Partitioned Data')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -294,6 +431,106 @@
 					"resultLimit": 5000
 				},
 				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n    TOP 100 *, result.filename() as filename, result.filepath() as filepath, result.filepath(1) as pk\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/tenantId=*/*/envid=*/*.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\nwhere (CAST(result.filepath(1) as varchar(10)) ) = 'tid-1' and (CAST(result.filepath(2) as varchar(10)) ) = 'eid-1'\n\n\n-- Read all Partitions\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/dlsvsapocfs1/demodata/licenses/**',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n    ",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Spark job definition 1')]",
+			"type": "Microsoft.Synapse/workspaces/sparkJobDefinitions",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"targetBigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"requiredSparkVersion": "2.4",
+				"language": "python",
+				"scanFolder": false,
+				"jobProperties": {
+					"name": "Spark job definition 1",
+					"file": "abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/wordcount.py",
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "d0ebcbd9-5e05-4943-8e52-401fd24053bb"
+					},
+					"args": [
+						"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt",
+						"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/results.txt"
+					],
+					"jars": [],
+					"pyFiles": [
+						"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/reference.py"
+					],
+					"files": [],
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Spark job definition 2')]",
+			"type": "Microsoft.Synapse/workspaces/sparkJobDefinitions",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"targetBigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"requiredSparkVersion": "2.4",
+				"language": "python",
+				"scanFolder": false,
+				"jobProperties": {
+					"name": "Spark job definition 2",
+					"file": "abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/wordcount.py",
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "1",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "e093a393-4408-4780-a6da-80c80f72de21"
+					},
+					"args": [
+						"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/shakespeare.txt",
+						"https://vsayxg7ydw3tzkjqpoc.blob.core.windows.net/dlsvsapocfs1/synapse/workspaces/vsayxg7ydw3tzkjqpocws1/batchjobs/Spark%20job%20definition%201/results.txt"
+					],
+					"jars": [],
+					"pyFiles": [
+						"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/reference.py"
+					],
+					"files": [
+						"abfss://sample-filesystem-append@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/sample-folder/shakespeare.txt"
+					],
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2
+				}
 			},
 			"dependsOn": []
 		},
@@ -1600,7 +1837,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Scratchpad')]",
+			"name": "[concat(parameters('workspaceName'), '/DownloadDataPrep')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -1621,7 +1858,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f56a99cd-5960-4827-b797-9b2daf8ac81c"
+						"spark.autotune.trackingId": "c7bf8ac2-3e1f-457f-b7b5-33fe3cfed386"
 					}
 				},
 				"metadata": {
@@ -1646,8 +1883,452 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 5,
 						"cores": 4,
-						"memory": 28,
-						"automaticScaleJobs": false
+						"memory": 28
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
+							"print(msg)"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"tags": []
+						},
+						"source": [
+							"# TenantId, EnvironmentId, ResourceId, UserId, LicenseId, LicenseClassification\r\n",
+							"data = [\r\n",
+							"    (\"tid-1\", \"eid-1a\", \"rid-1a\", \"uid-1\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-1\", \"eid-1a\", \"rid-2a\", \"uid-2\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-1\", \"eid-2a\", \"rid-3a\", \"uid-3\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-1\", \"eid-2a\", \"rid-4a\", \"uid-4\", \"lic-1\", \"License Display A\"),    \r\n",
+							"    (\"tid-2\", \"eid-1b\", \"rid-1b\", \"uid-5\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-2\", \"eid-1b\", \"rid-2b\", \"uid-6\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-2\", \"eid-2b\", \"rid-3b\", \"uid-7\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-2\", \"eid-2b\", \"rid-4b\", \"uid-8\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-3\", \"eid-1c\", \"rid-1c\", \"uid-9\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-3\", \"eid-1c\", \"rid-2c\", \"uid-10\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-3\", \"eid-2c\", \"rid-3c\", \"uid-11\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-3\", \"eid-2c\", \"rid-4c\", \"uid-12\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-4\", \"eid-1d\", \"rid-1d\", \"uid-13\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-4\", \"eid-1d\", \"rid-2d\", \"uid-14\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-4\", \"eid-2d\", \"rid-3d\", \"uid-15\", \"lic-1\", \"License Display A\"),\r\n",
+							"    (\"tid-4\", \"eid-2d\", \"rid-4d\", \"uid-16\", \"lic-1\", \"License Display A\"),\r\n",
+							"]"
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
+							"lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+							"lic_df.printSchema()\r\n",
+							"lic_df.show(truncate=False)"
+						],
+						"outputs": [],
+						"execution_count": 3
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"lic_df.write.partitionBy(\"tenantId\").parquet('abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/licenses', mode='overwrite')\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 5
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"single_df=spark.read.parquet(\"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/licenses/tenantId=tid-1\")\r\n",
+							"single_df.show(truncate=False)\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 10
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DownloadPoc')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "a544db41-1dca-4fa5-b3c8-7a976309c370"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
+						"name": "ws1sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 5,
+						"cores": 4,
+						"memory": 28
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
+							"print(msg)"
+						],
+						"outputs": [],
+						"execution_count": 13
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"tags": [
+								"parameters"
+							]
+						},
+						"source": [
+							"TenantId = \"tid-1\"\r\n",
+							"EnvironmentId = \"eid-1\"\r\n",
+							"SessionId = \"test\""
+						],
+						"outputs": [],
+						"execution_count": 14
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"print('Input Parameters: TID: {0} - EID: {1}'.format(TenantId, EnvironmentId))"
+						],
+						"outputs": [],
+						"execution_count": 15
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"tags": []
+						},
+						"source": [
+							"# TenantId, EnvironmentId, ResourceId, UserId, LicenseId, LicenseClassification\r\n",
+							"data = [(\"tid-1\",\"eid-1\", \"rid-1\", \"uid-1\", \"lic-1\", \"License Display A\"), \r\n",
+							"        (\"tid-1\",\"eid-1\", \"rid-2\", \"uid-2\", \"lic-1\", \"License Display A\"), \r\n",
+							"        (\"tid-1\",\"eid-2\", \"rid-3\", \"uid-3\", \"lic-1\", \"License Display A\"), \r\n",
+							"        (\"tid-1\",\"eid-2\", \"rid-4\", \"uid-4\", \"lic-1\", \"License Display A\"), \r\n",
+							"      ]"
+						],
+						"outputs": [],
+						"execution_count": 16
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"#schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
+							"#lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
+							"lic_df=spark.read.parquet(\"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/demodata/licenses/tenantId={0}\".format(TenantId))\r\n",
+							"lic_df.printSchema()\r\n",
+							"lic_df.show(truncate=False)"
+						],
+						"outputs": [],
+						"execution_count": 17
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# create a temp view to manipulate data using SQL\r\n",
+							"lic_df.createOrReplaceTempView(\"tmpLicenses\");"
+						],
+						"outputs": [],
+						"execution_count": 18
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"# do any additional filtering, aggregations, etc.\r\n",
+							"results = spark.sql(\"select * from tmpLicenses\")"
+						],
+						"outputs": [],
+						"execution_count": 19
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"results.printSchema()\r\n",
+							"results.show(truncate=False)"
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from pyspark.sql.functions import lit\r\n",
+							"results = results.withColumn(\"sessionId\", lit(SessionId)).withColumn(\"tenantId\", lit(TenantId))"
+						],
+						"outputs": [],
+						"execution_count": 29
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"fileName = \"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/downloads/{0}/{1}\".format(TenantId,SessionId)\r\n",
+							"results.coalesce(1).write.option(\"header\",'true').csv(fileName, mode='overwrite')"
+						],
+						"outputs": [],
+						"execution_count": 30
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"mssparkutils.notebook.exit(fileName)"
+						],
+						"outputs": [],
+						"execution_count": 11
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Scratchpad')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ws1sparkpool1",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "8d9f6fdd-bf7d-4cf0-81bc-597d04827784"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
+						"name": "ws1sparkpool1",
+						"type": "Spark",
+						"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "2.4",
+						"nodeCount": 5,
+						"cores": 4,
+						"memory": 28
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -2000,308 +2681,14 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/DownloadPoc')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"bigDataPool": {
-					"referenceName": "ws1sparkpool1",
-					"type": "BigDataPoolReference"
-				},
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": false,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "70654fe0-e3fb-4aac-b5dc-7ffc1d9e9984"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "Synapse PySpark"
-					},
-					"language_info": {
-						"name": "python"
-					},
-					"a365ComputeOptions": {
-						"id": "/subscriptions/75d3d9a6-7fad-46e1-bea2-4d2140013c78/resourceGroups/vsasynapsepoc/providers/Microsoft.Synapse/workspaces/vsayxg7ydw3tzkjqpocws1/bigDataPools/ws1sparkpool1",
-						"name": "ws1sparkpool1",
-						"type": "Spark",
-						"endpoint": "https://vsayxg7ydw3tzkjqpocws1.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ws1sparkpool1",
-						"auth": {
-							"type": "AAD",
-							"authResource": "https://dev.azuresynapse.net"
-						},
-						"sparkVersion": "2.4",
-						"nodeCount": 5,
-						"cores": 4,
-						"memory": 28,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"msg = \"Starting download job # {0}\".format(mssparkutils.env.getJobId())\r\n",
-							"print(msg)"
-						],
-						"outputs": [],
-						"execution_count": 30
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							},
-							"tags": [
-								"parameters"
-							]
-						},
-						"source": [
-							"TenantId = \"tid-1\"\r\n",
-							"EnvironmentId = \"eid-1\"\r\n",
-							"SessionId = \"s1\""
-						],
-						"outputs": [],
-						"execution_count": 31
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"print('Input Parameters: TID: {0} - EID: {1}'.format(TenantId, EnvironmentId))"
-						],
-						"outputs": [],
-						"execution_count": 32
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"tags": []
-						},
-						"source": [
-							"# TenantId, EnvironmentId, ResourceId, UserId, LicenseId, LicenseClassification\r\n",
-							"data = [(\"tid-1\",\"eid-1\", \"rid-1\", \"uid-1\", \"lic-1\", \"License Display A\"), \r\n",
-							"        (\"tid-1\",\"eid-1\", \"rid-2\", \"uid-2\", \"lic-1\", \"License Display A\"), \r\n",
-							"        (\"tid-1\",\"eid-2\", \"rid-3\", \"uid-3\", \"lic-1\", \"License Display A\"), \r\n",
-							"        (\"tid-1\",\"eid-2\", \"rid-4\", \"uid-4\", \"lic-1\", \"License Display A\"), \r\n",
-							"      ]"
-						],
-						"outputs": [],
-						"execution_count": 33
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"schema = [\"tenantId\",\"environmentId\", \"resourceId\", \"userId\", \"licenseId\", \"licenseDesc\"]\r\n",
-							"lic_df = spark.createDataFrame(data=data, schema=schema)\r\n",
-							"lic_df.printSchema()\r\n",
-							"lic_df.show(truncate=False)"
-						],
-						"outputs": [],
-						"execution_count": 34
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"lic_df.createOrReplaceTempView(\"tmpLicenses\");"
-						],
-						"outputs": [],
-						"execution_count": 35
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"results = spark.sql(\"select * from tmpLicenses where tenantId == '{0}'\".format(TenantId))"
-						],
-						"outputs": [],
-						"execution_count": 36
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"results.printSchema()\r\n",
-							"results.show(truncate=False)"
-						],
-						"outputs": [],
-						"execution_count": 19
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"from pyspark.sql.functions import lit\r\n",
-							"results.withColumn(\"sessionId\", lit(SessionId))"
-						],
-						"outputs": [],
-						"execution_count": 37
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"fileName = \"abfss://dlsvsapocfs1@vsayxg7ydw3tzkjqpoc.dfs.core.windows.net/downloads/{0}/{1}\".format(TenantId,SessionId)\r\n",
-							"results.coalesce(1).write.csv(fileName, mode='overwrite')"
-						],
-						"outputs": [],
-						"execution_count": 41
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							""
-						],
-						"outputs": [],
-						"execution_count": null
-					},
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							"mssparkutils.notebook.exit(fileName)"
-						],
-						"outputs": [],
-						"execution_count": 42
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/DownloadPocPipeline')]",
+			"name": "[concat(parameters('workspaceName'), '/JD Pipeline')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"activities": [
 					{
-						"name": "DownloadPoc",
-						"type": "SynapseNotebook",
+						"name": "Spark job definition1",
+						"type": "SparkJob",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -2312,41 +2699,26 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebook": {
-								"referenceName": "DownloadPoc",
-								"type": "NotebookReference"
+							"sparkJob": {
+								"referenceName": "Spark job definition 2",
+								"type": "SparkJobDefinitionReference"
 							},
-							"parameters": {
-								"TenantId": {
-									"value": {
-										"value": "@pipeline().parameters.TenantId",
-										"type": "Expression"
-									},
-									"type": "string"
-								},
-								"EnvironmentId": {
-									"value": {
-										"value": "@pipeline().parameters.EnvironmentId",
-										"type": "Expression"
-									},
-									"type": "string"
-								},
-								"SessionId": {
-									"value": {
-										"value": "@pipeline().parameters.SessionId",
-										"type": "Expression"
-									},
-									"type": "string"
-								}
-							},
-							"snapshot": true,
-							"sparkPool": {
+							"args": [
+								"Param1",
+								"Param 2"
+							],
+							"targetBigDataPool": {
 								"referenceName": "ws1sparkpool1",
 								"type": "BigDataPoolReference"
 							},
 							"executorSize": "Small",
-							"conf": {},
-							"driverSize": "Small"
+							"conf": {
+								"spark.dynamicAllocation.enabled": false,
+								"spark.dynamicAllocation.minExecutors": 2,
+								"spark.dynamicAllocation.maxExecutors": 2
+							},
+							"driverSize": "Small",
+							"numExecutors": 2
 						}
 					}
 				],
@@ -2354,25 +2726,42 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"parameters": {
-					"TenantId": {
-						"type": "string",
-						"defaultValue": "tid-1"
-					},
-					"EnvironmentId": {
-						"type": "string",
-						"defaultValue": "eid-1"
-					},
-					"SessionId": {
-						"type": "string",
-						"defaultValue": "sid-2"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('workspaceId'), '/notebooks/DownloadPoc')]",
+				"[concat(variables('workspaceId'), '/sparkJobDefinitions/Spark job definition 2')]",
 				"[concat(variables('workspaceId'), '/bigDataPools/ws1sparkpool1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/JD Trigger')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipeline": {
+					"pipelineReference": {
+						"referenceName": "JD Pipeline",
+						"type": "PipelineReference"
+					},
+					"parameters": {}
+				},
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Hour",
+					"interval": 24,
+					"startTime": "2023-01-05T15:52:00Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/pipelines/JD Pipeline')]"
 			]
 		}
 	]
